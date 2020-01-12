@@ -24,16 +24,36 @@ class WordpressReactjsPlugin {
 		$this->plugin_name = 'wordpress-plugin-reactjs-boilerplate';
         $this->version = '1.0.0';
 
-        add_shortcode( 'footag', [$this, 'footag_func'] );
+        //simple component
+        add_shortcode( 'simple_component', [$this, 'simple_component_func'] );
+
+        //simple component with axios
+        add_shortcode( 'simple_component_axios', [$this, 'simple_component_axios_func'] );
+        add_action( 'wp_ajax_simpleComponentAxios', [$this, 'simpleComponentAxios'] );
+        add_action( 'wp_ajax_nopriv_simpleComponentAxios', [$this, 'simpleComponentAxios'] );
 
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_filter( 'script_loader_tag', [$this, 'enqueue_babale_type_scripts'], 10, 3);
     }
     
-    public function footag_func() {
-        return '<dic id="my-app"></div>';
+    //simple component
+    public function simple_component_func() {
+        return '<dic id="simple-component"></div>';
     }
-    
+
+    //simple component with axios
+    public function simple_component_axios_func() {
+        return '<dic id="simple-component-axios"></div>';
+    }
+    public function simpleComponentAxios() {
+        echo json_encode([
+            ['id' => 1, 'name' => 'John'],
+            ['id' => 2, 'name' => 'Jane'],
+            ['id' => 3, 'name' => 'Sara'],
+        ]);
+        die;
+    }
+
     public function enqueue_scripts() {
 		wp_enqueue_script(
             $this->plugin_name . 'babel',
@@ -58,7 +78,7 @@ class WordpressReactjsPlugin {
         );
 		wp_enqueue_script(
             $this->plugin_name . 'axios',
-            'https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.min.map',
+            'https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.min.js',
             array( $this->plugin_name . 'react' ),
             $this->version,
             true
@@ -69,6 +89,11 @@ class WordpressReactjsPlugin {
             array( $this->plugin_name . 'react-dom' ),
             $this->version,
             true
+        );
+        wp_localize_script(
+            $this->plugin_name . 'react-base',
+            'base_data',
+            array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
         );
     }
     

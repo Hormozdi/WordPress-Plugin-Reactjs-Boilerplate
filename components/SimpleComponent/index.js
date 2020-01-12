@@ -1,4 +1,4 @@
-var App = class App extends React.Component {
+const SimpleComponent = class SimpleComponent extends React.Component {
   state = {
     values: [],
     inputValue: ""
