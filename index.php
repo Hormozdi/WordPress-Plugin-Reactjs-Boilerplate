@@ -44,14 +44,21 @@ class WordpressReactjsPlugin {
         );
         wp_enqueue_script(
             $this->plugin_name . 'react',
-            'https://unpkg.com/react@16/umd/react.development.js',
+            'https://unpkg.com/react@16/umd/react.production.min.js',
             array( $this->plugin_name . 'babel' ),
             $this->version,
             true
         );
 		wp_enqueue_script(
             $this->plugin_name . 'react-dom',
-            'https://unpkg.com/react-dom@16/umd/react-dom.development.js',
+            'https://unpkg.com/react-dom@16/umd/react-dom.production.min.js',
+            array( $this->plugin_name . 'react' ),
+            $this->version,
+            true
+        );
+		wp_enqueue_script(
+            $this->plugin_name . 'axios',
+            'https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.min.map',
             array( $this->plugin_name . 'react' ),
             $this->version,
             true
